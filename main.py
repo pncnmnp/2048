@@ -6,7 +6,13 @@ import random, time
 class Main:
 	board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 	root = tk.Tk()
-
+	def key(self,event):
+		print("Pressed",event.keysym)
+	def wait_for_move(self):
+		self.root.bind("<Up>",self.key)
+		self.root.bind("<Down>",self.key)
+		self.root.bind("<Left>",self.key)
+		self.root.bind("<Right>",self.key)
 	def display(self):
 		for i in range(len(self.board)):
 			for j in range(len(self.board)):
