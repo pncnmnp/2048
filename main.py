@@ -1,11 +1,13 @@
 import tkinter as tk
 import random, time
-
+from numpy.random import choice
+from sys import exit
 
 # board = [[0] * 4] * 4
 class Main:
 	def __init__(self):
 		self.board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+		self.score = 0
 		self.root = tk.Tk()
 		self.root.bind("<KeyPress>", self.key)
 
@@ -62,9 +64,10 @@ class Main:
 
 	def spawn(self):
 		'''
-			Randomly sets a single zero element in board to 2,4 or 8
+		Randomly sets a single zero element in board to 2,4 or 8
 		'''
-		num = random.choice([2, 4, 8])
+		# Probability distribution
+		num = choice([2, 4, 8], p = [0.6, 0.3, 0.1])
 		index = [(i, j) for i in range(len(self.board))
 		         for j in range(len(self.board))
 		         ]  # Generate all possible rows and columns
@@ -74,9 +77,18 @@ class Main:
 			index = random.choice(index)
 			self.board[index[0]][index[1]] = num
 		else:
-			# Board is full
-			pass
+			self.gameOver()
+			exit()
 
+	def gameOver(self):
+		text = "Game Over! Your score is: " + str(self.score)
+		popup = tk.Tk()
+		popup.wm_title("Game Over!")
+		label = tk.Label(popup, text = text)
+		label.pack()
+		exitButton = tk.Button(popup, text = "Exit", command = popup.destroy)
+		exitButton.pack()
+		popup.mainloop()
 
 m = Main()
 m.display()
