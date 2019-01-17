@@ -9,6 +9,7 @@ class Main:
 		self.board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 		self.score = 0
 		self.root = tk.Tk()
+		self.root.title("2048")
 		self.root.bind("<KeyPress>", self.key)
 
 	def perform_move(self, l):
@@ -52,15 +53,34 @@ class Main:
 		self.spawn()
 		for i in range(len(self.board)):
 			for j in range(len(self.board)):
+				colors = {0:"white", 2:"coral", 4:"tomato", 8:"orange red", 16:"red", 32:"red3", 
+				64:"red4", 128:"light goldenrod", 256:"goldenrod", 512:"dark goldenrod", 1024:"indian red", 2048:"gold"}
+
 				tk.Label(
 					self.root,
 					text=self.board[i][j],
 					height=5,
 					width=10,
 					borderwidth=2,
+					font = 'Helvetica 14 bold',
+					fg = colors[self.board[i][j]],
+					bg = "black",
 					relief="ridge").grid(
 						row=i, column=j)
-		self.root.update()
+
+				self.root.update()
+
+		tk.Label(
+			self.root,
+			text="Score: "+str(self.score),
+		).grid(
+			row=5,
+			column=0,
+			sticky="nsew",
+			rowspan=4
+		)
+		
+		self.root.update()	
 
 	def spawn(self):
 		'''
@@ -100,8 +120,9 @@ class Main:
 		label.pack()
 		exitButton = tk.Button(popup, text = "Exit", command = popup.destroy)
 		exitButton.pack()
-		popup.mainloop()
+		self.root.wait_window(popup)
 
-m = Main()
-m.display()
-m.root.mainloop()
+if __name__ == '__main__':
+	m = Main()
+	m.display()
+	m.root.mainloop()
