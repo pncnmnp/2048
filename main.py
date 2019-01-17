@@ -2,6 +2,8 @@ import tkinter as tk
 import random, time
 from numpy.random import choice
 from sys import exit
+import datetime
+from csv import reader
 
 class Main:
 	def __init__(self):
@@ -11,6 +13,13 @@ class Main:
 		self.root = tk.Tk()
 		self.root.title("2048")
 		self.root.bind("<KeyPress>", self.key)
+		self.highscorefile = "./highscore.csv"
+		self.highscore = self.get_high_score()
+
+	def get_high_score(self):
+		with open(self.highscorefile, 'r') as w:
+			read = reader(w)
+			return max(int(col[1].replace(',', '')) for col in read)
 
 	def perform_move(self, l):
 		for i in range(len(l)):
@@ -72,7 +81,8 @@ class Main:
 
 		tk.Label(
 			self.root,
-			text="Score: "+str(self.score),
+			text="Score: "+str(self.score)+"\nHighest: "+str(self.highscore),
+			justify="left"
 		).grid(
 			row=5,
 			column=0,
@@ -99,6 +109,11 @@ class Main:
 
 		elif self.gameOverCondition() == True:
 			self.gameOver()
+			date = datetime.datetime.now().strftime("%d/%m/%y")
+
+			with open(self.highscorefile, 'a') as w:
+				w.write(date+','+str(self.score)+'\n')
+
 			exit(0)
 
 		else:
